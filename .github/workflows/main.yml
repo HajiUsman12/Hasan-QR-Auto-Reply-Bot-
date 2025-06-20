@@ -1,0 +1,38 @@
+name: Hasan Bot PM2 Compatible
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360  # 🕒 6 hour max runtime
+
+    steps:
+    - name: 📥 Clone Repository
+      uses: actions/checkout@v3
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: 📦 Install Dependencies
+      run: npm install
+
+    - name: 🔍 Check PM2 Compatibility (Optional)
+      run: |
+        npm install -g pm2
+        node -v
+        pm2 -v
+        echo "✅ PM2 Ready! You can deploy this repo to any VPS using PM2."
+
+    - name: ✅ Run Bot Temporarily
+      run: |
+        echo "💬 Running bot (test run)..."
+        node index.js &
+        sleep 300
+        echo "🛑 Stopping test after 5 min"
